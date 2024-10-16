@@ -1,13 +1,17 @@
 const express = require("express");
+const path = require("path");
+
+const adminRouter = require("./routes/admin");
+const shopRouter = require("./routes/shop");
 
 const app = express();
 
-app.use((req, res, next) => {
-  console.log("In the middleware");
-  next();
-});
-app.use((req, res, next) => {
-  res.send("<h1>HELLO!</h1>");
+app.use(express.urlencoded({ extended: true }));
+app.use(adminRouter);
+app.use(shopRouter);
+
+app.use("/", (req, res, next) => {
+  res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
 });
 
-app.listen(3000)
+app.listen(3000);
