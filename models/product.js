@@ -23,12 +23,19 @@ module.exports = class Product {
 
   save() {
     getProductsFromFile((products) => {
+      this.id = Math.random().toString();
       products.push(this);
-      fs.writeFile(productsPath, JSON.stringify(products), (err) => {
-        console.log(err);
-      });
+      fs.writeFile(productsPath, JSON.stringify(products), (err) => {});
     });
   }
+
+  static findById(id, callback) {
+    getProductsFromFile((products) => {
+      const product = products.find((product) => product.id === id);
+      callback(product);
+    });
+  }
+
   static fetchAll(callback) {
     getProductsFromFile(callback);
   }
